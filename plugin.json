@@ -1,0 +1,305 @@
+{
+  "tesserae_compat": "1.x",
+  "name": "markdown_note",
+  "version": "0.1.0",
+  "kind": "widget",
+  "description": "Write markdown, get a note, sign or shelf label. Type it into the cell, or point many cells at one markdown file (a gist, a raw URL, any text endpoint) split into sections so a whole shelf of e-ink tags is edited in one document. Auto-fits the type to the cell, with framing, inversion and 90° rotation for label tags.",
+  "icon": "ph-tag",
+  "requires": [
+    "network:*"
+  ],
+  "supports": {
+    "sizes": [
+      "xs",
+      "sm",
+      "md",
+      "lg"
+    ]
+  },
+  "render": {
+    "dither": "none",
+    "needs_network": true
+  },
+  "cell_options": [
+    {
+      "name": "text",
+      "type": "textarea",
+      "label": "Markdown",
+      "default": "# Pantry\nRice · Pasta · Flour\n\n**Top shelf** — tins",
+      "help": "The label itself. Headings, **bold**, lists, quotes, tables and images all render. Ignored when a document URL is set below."
+    },
+    {
+      "name": "source_url",
+      "type": "string",
+      "label": "Document URL",
+      "default": "",
+      "help": "Optional. Fetch the markdown from a URL instead (raw gist, GitHub raw, Nextcloud, any plain-text endpoint). Point every label at the same URL and give each one a different section."
+    },
+    {
+      "name": "section",
+      "type": "string",
+      "label": "Section",
+      "default": "",
+      "help": "Which part of the document this cell shows: a heading name, or a number. Sections are split on --- lines, or on headings when there are no --- lines. Blank shows the whole document."
+    },
+    {
+      "name": "line_breaks",
+      "type": "select",
+      "label": "Line breaks",
+      "default": "typed",
+      "help": "As typed suits hand-written labels. Reflow suits pasted prose that was already hard-wrapped at 80 columns.",
+      "choices": [
+        {
+          "value": "typed",
+          "label": "As typed — every newline breaks"
+        },
+        {
+          "value": "reflow",
+          "label": "Reflow — blank line starts a paragraph"
+        }
+      ]
+    },
+    {
+      "name": "layout",
+      "type": "select",
+      "label": "Layout",
+      "default": "label",
+      "choices": [
+        {
+          "value": "label",
+          "label": "Label — edge to edge, type fills the tag"
+        },
+        {
+          "value": "page",
+          "label": "Page — padded, document proportions"
+        }
+      ]
+    },
+    {
+      "name": "text_size",
+      "type": "select",
+      "label": "Type size",
+      "default": "auto",
+      "choices": [
+        {
+          "value": "auto",
+          "label": "Auto — fill the cell"
+        },
+        {
+          "value": "xs",
+          "label": "Extra small"
+        },
+        {
+          "value": "sm",
+          "label": "Small"
+        },
+        {
+          "value": "md",
+          "label": "Medium"
+        },
+        {
+          "value": "lg",
+          "label": "Large"
+        },
+        {
+          "value": "xl",
+          "label": "Extra large"
+        }
+      ]
+    },
+    {
+      "name": "align",
+      "type": "select",
+      "label": "Align",
+      "default": "left",
+      "choices": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Centre"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "name": "valign",
+      "type": "select",
+      "label": "Vertical position",
+      "default": "middle",
+      "choices": [
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "middle",
+          "label": "Middle"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        }
+      ]
+    },
+    {
+      "name": "density",
+      "type": "select",
+      "label": "Margins",
+      "default": "normal",
+      "choices": [
+        {
+          "value": "tight",
+          "label": "Tight"
+        },
+        {
+          "value": "normal",
+          "label": "Normal"
+        },
+        {
+          "value": "roomy",
+          "label": "Roomy"
+        }
+      ]
+    },
+    {
+      "name": "frame",
+      "type": "select",
+      "label": "Frame",
+      "default": "none",
+      "choices": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "hairline",
+          "label": "Hairline"
+        },
+        {
+          "value": "bold",
+          "label": "Bold rule"
+        }
+      ]
+    },
+    {
+      "name": "invert",
+      "type": "boolean",
+      "label": "Invert (light type on black)",
+      "default": false
+    },
+    {
+      "name": "rotate",
+      "type": "select",
+      "label": "Rotate",
+      "default": "0",
+      "help": "For tags mounted sideways or upside down on a shelf lip.",
+      "choices": [
+        {
+          "value": "0",
+          "label": "0°"
+        },
+        {
+          "value": "90",
+          "label": "90°"
+        },
+        {
+          "value": "180",
+          "label": "180°"
+        },
+        {
+          "value": "270",
+          "label": "270°"
+        }
+      ]
+    },
+    {
+      "name": "refresh_min",
+      "type": "number",
+      "label": "Re-read the document every (minutes)",
+      "default": 15
+    }
+  ],
+  "fragments": [
+    {
+      "id": "heading",
+      "label": "Heading only",
+      "w": 240,
+      "h": 90
+    },
+    {
+      "id": "body",
+      "label": "Body, no heading",
+      "w": 240,
+      "h": 160
+    }
+  ],
+  "data_schema": {
+    "fields": [
+      {
+        "name": "body",
+        "label": "Body (no heading)",
+        "type": "str"
+      },
+      {
+        "name": "count",
+        "label": "Section count",
+        "type": "num"
+      },
+      {
+        "name": "markdown",
+        "label": "Markdown",
+        "type": "str"
+      },
+      {
+        "name": "section",
+        "label": "Section",
+        "type": "str"
+      },
+      {
+        "name": "sections",
+        "label": "Sections",
+        "type": "arr"
+      },
+      {
+        "name": "source",
+        "label": "Source",
+        "type": "str"
+      },
+      {
+        "name": "title",
+        "label": "Heading",
+        "type": "str"
+      },
+      {
+        "name": "updated",
+        "label": "Updated",
+        "type": "num"
+      },
+      {
+        "name": "url",
+        "label": "Url",
+        "type": "str"
+      }
+    ],
+    "sample": {
+      "body": "Rice · Pasta · Flour",
+      "count": 2,
+      "markdown": "# Pantry\nRice · Pasta · Flour",
+      "section": "Pantry",
+      "sections": [
+        "Pantry",
+        "Garage"
+      ],
+      "source": "inline",
+      "title": "Pantry",
+      "updated": 1786925586,
+      "url": ""
+    }
+  }
+}
