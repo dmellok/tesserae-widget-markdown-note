@@ -40,7 +40,7 @@
       "type": "string",
       "label": "Section",
       "default": "",
-      "help": "Which part of the document this cell shows: a heading name, or a number. Sections are split on --- lines, or on headings when there are no --- lines. Blank shows the whole document."
+      "help": "Which part of the document this cell shows: a heading name, or a number. Sections are split on --- lines, or on headings when there are no --- lines. 0 draws a random section each refresh, and may repeat one. Blank shows the whole document."
     },
     {
       "name": "line_breaks",
