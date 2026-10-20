@@ -54,6 +54,15 @@ def test_section_matches_by_number_and_prefix() -> None:
     assert call(text=BY_HEADING, section="P A N T R Y!")["section"] == "Pantry"
 
 
+def test_section_zero_picks_a_random_section() -> None:
+    seen = set()
+    for _ in range(60):
+        out = call(text=BY_HEADING, section="0")
+        assert out["markdown"].startswith(f"# {out['section']}")
+        seen.add(out["section"])
+    assert seen == {"Pantry", "Garage", "Craft"}
+
+
 def test_blank_section_shows_whole_document() -> None:
     out = call(text=TWO_BINS)
     assert "Pantry" in out["markdown"]

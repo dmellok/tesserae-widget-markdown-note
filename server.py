@@ -7,8 +7,9 @@ relabelling a bin is an edit in one document instead of 20 dashboard visits.
 Sectioning is deliberately forgiving because the document is written by hand:
 ``---`` rules split it when present, headings split it when they don't, and a
 section is addressed by its heading text (case- and punctuation-insensitive) or
-by its number. A miss returns the list of names that ARE in the document, which
-is the only error message that actually helps someone wiring up 20 tags.
+by its number, with ``0`` drawing a random one each refresh, repeats included.
+A miss returns the list of names that ARE in the document, which is the only
+error message that actually helps someone wiring up 20 tags.
 
 No markdown is rendered here. The client owns rendering so that inline text
 keeps working when the server has nothing to add, and so the same renderer
@@ -19,6 +20,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import random
 import re
 import time
 from pathlib import Path
@@ -134,6 +136,12 @@ def _pick(chunks: list[str], names: list[str], wanted: str) -> tuple[str, str, s
     key = _slug(wanted)
     if key.isdigit():
         idx = int(key)
+        if idx == 0:
+            # The wildcard eats this number: a section actually named "0", and
+            # a zero-based guess at "the first section", both rotate silently
+            # instead of getting the not-found listing below.
+            i = random.randrange(len(chunks))
+            return chunks[i], names[i], ""
         if 1 <= idx <= len(chunks):
             return chunks[idx - 1], names[idx - 1], ""
 

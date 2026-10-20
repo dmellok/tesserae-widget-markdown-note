@@ -46,9 +46,11 @@ Sectioning rules, in order:
 
 A section is addressed by its heading text — case, spacing and punctuation are
 ignored, so `Craft supplies`, `craft supplies` and `CRAFT-SUPPLIES` all match —
-by an unambiguous prefix, or by its number (`3`). Blank shows the whole
-document. Name one that isn't there and the label tells you which names *are*,
-which is the message you want when you're wiring up twenty of them.
+by an unambiguous prefix, or by its number (`3`). `0` is the wildcard: one
+section drawn at random each refresh, repeats included. Blank shows the whole
+document.
+Name one that isn't there and the label tells you which names *are*, which is
+the message you want when you're wiring up twenty of them.
 
 The document is cached per URL on the *Re-read* interval, and a failed refresh
 keeps serving the last good copy: a tag showing yesterday's (identical) text
@@ -70,7 +72,7 @@ already hard-wrapped at 80 columns.
 | -------------- | ------- | ------------------------------------------------------------------- |
 | `text`         | sample  | The markdown, when no document URL is set.                          |
 | `source_url`   | —       | Fetch the markdown from a URL instead.                              |
-| `section`      | —       | Which part of the document this cell shows.                         |
+| `section`      | —       | Which part of the document this cell shows; `0` picks one at random.|
 | `line_breaks`  | `typed` | `typed` breaks on every newline; `reflow` only on a blank line.     |
 | `layout`       | `label` | `label` fills the tag edge to edge; `page` uses document margins.   |
 | `text_size`    | `auto`  | `auto` measures and fills the cell; or pin `xs`–`xl`.               |
