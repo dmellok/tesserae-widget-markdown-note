@@ -1,7 +1,7 @@
 {
   "tesserae_compat": "1.x",
   "name": "markdown_note",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "kind": "widget",
   "description": "Write markdown, get a note, sign or shelf label. Type it into the cell, or point many cells at one markdown file (a gist, a raw URL, any text endpoint) split into sections so a whole shelf of e-ink tags is edited in one document. Auto-fits the type to the cell, with framing, inversion and 90° rotation for label tags.",
   "icon": "ph-tag",
